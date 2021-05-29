@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SongFinder.DTO;
-using SongFinder.Songs;
+using SongFinder.StreamingServices;
 
 namespace SongFinder.Controllers
 {
@@ -36,9 +33,15 @@ namespace SongFinder.Controllers
         /// <returns>Ok(List< Song >)</returns>
         [HttpGet]
         [ProducesResponseType(200)]
-        public ActionResult<List<Song>> GetSongResults([FromQuery] SongSearchDTO songSearch)
+        public async Task<ActionResult<StreamingServicesSongResponseDTO>> GetSongResults([FromQuery] SongSearchDTO songSearch)
         {
-            return Ok();
+            var spotifyService = new SpotifyService();
+            SongResponseDTO spotifyResult = await spotifyService.SearchSong(songSearch);
+            StreamingServicesSongResponseDTO result = new StreamingServicesSongResponseDTO
+                                                    {
+                                                        SpotifySongResponse = spotifyResult
+                                                    };
+            return Ok(result);
         }
 
         //GET amazon-music-search
@@ -48,7 +51,7 @@ namespace SongFinder.Controllers
         /// <returns>Ok(Song)</returns>
         [HttpGet("amazon-music-search")]
         [ProducesResponseType(200)]
-        public ActionResult<Song> GetAmazonMusicSongResults([FromQuery] SongSearchDTO songSearch)
+        public ActionResult<SongResponseDTO> GetAmazonMusicSongResults([FromQuery] SongSearchDTO songSearch)
         {
             return Ok();
         }
@@ -60,9 +63,25 @@ namespace SongFinder.Controllers
         /// <returns>Ok(Song)</returns>
         [HttpGet("spotify-search")]
         [ProducesResponseType(200)]
-        public ActionResult<Song> GetSpotifySongResults([FromQuery] SongSearchDTO songSearch)
+        public async Task<ActionResult<SongResponseDTO>> GetSingleSpotifySongResults([FromQuery] SongSearchDTO songSearch)
         {
-            return Ok();
+            var spotifyService = new SpotifyService();
+            SongResponseDTO result =  await spotifyService.SearchSong(songSearch);
+            return Ok(result);
+        }
+
+        //GET spotify-search-list
+        /// <summary>
+        /// This GET method returns a list of possible song found by spotify music       
+        /// </summary>
+        /// <returns>Ok(List(Song))</returns>
+        [HttpGet("spotify-search-list")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<List<SongResponseDTO>>> GetSpotifySongResultsList([FromQuery] SongSearchDTO songSearch)
+        {
+            var spotifyService = new SpotifyService();
+            List<SongResponseDTO> result =  await spotifyService.SearchSongs(songSearch);
+            return Ok(result);
         }
 
         //GET deezer-search
@@ -72,7 +91,7 @@ namespace SongFinder.Controllers
         /// <returns>Ok(Song)</returns>
         [HttpGet("deezer-search")]
         [ProducesResponseType(200)]
-        public ActionResult<Song> GetDeezerSongResults([FromQuery] SongSearchDTO songSearch)
+        public ActionResult<SongResponseDTO> GetDeezerSongResults([FromQuery] SongSearchDTO songSearch)
         {
             return Ok();
         }
