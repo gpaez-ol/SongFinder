@@ -44,16 +44,18 @@ namespace SongFinder.Controllers
             return Ok(result);
         }
 
-        //GET amazon-music-search
+        //GET apple-music-search
         /// <summary>
-        /// This GET method returns a possible song found by amazon  music        
+        /// This GET method returns a possible song found by apple  music        
         /// </summary>
         /// <returns>Ok(Song)</returns>
-        [HttpGet("amazon-music-search")]
+        [HttpGet("apple-music-search")]
         [ProducesResponseType(200)]
-        public ActionResult<SongResponseDTO> GetAmazonMusicSongResults([FromQuery] SongSearchDTO songSearch)
+        public async Task<ActionResult> GetAppleMusicSongResults([FromQuery] SongSearchDTO songSearch)
         {
-            return Ok();
+            var appleMusicService = new AppleMusicService();
+            var result = await appleMusicService.searchCatalogForResource("Tavo Paez");
+            return Ok(result);
         }
 
         //GET spotify-search

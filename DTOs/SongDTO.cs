@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 namespace SongFinder.DTO
 {
 
@@ -23,9 +22,9 @@ namespace SongFinder.DTO
         /// </summary>
         public SongResponseDTO SpotifySongResponse {get;set;}
         /// <summary>
-        /// Amazon Music Result
+        /// apple Music Result
         /// </summary>
-        public SongResponseDTO AmazonMusicResponse {get;set;}
+        public SongResponseDTO AppleMusicResponse {get;set;}
         /// <summary>
         /// Deezer Music Result
         /// </summary>
