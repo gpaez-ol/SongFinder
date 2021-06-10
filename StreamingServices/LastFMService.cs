@@ -12,14 +12,15 @@ namespace SongFinder.StreamingServices
     {
         private LastfmClient GetLastfmClient()
         {
-            var client = new LastfmClient("apikey", "apisecret"); // TODO: Add api key and secrets
+            var client = new LastfmClient("1dc640749935e63a85413195795cf56d", "74cd7c7f98189e6b1e073783c9282928"); // TODO: Add api key and secrets
             return client;
         }
 
         public async Task<SongResponseDTO> SearchSong(SongSearchDTO query)
         {
             LastfmClient lastFM = GetLastfmClient();
-            var tracks = await lastFM.Track.SearchAsync(query.Title);
+            string queryParam = query.Title + " " + query.Artist;
+            var tracks = await lastFM.Track.SearchAsync(queryParam);
             var track = tracks.FirstOrDefault();
             var response = new SongResponseDTO(){
                          Title = track.Name,
@@ -32,7 +33,8 @@ namespace SongFinder.StreamingServices
         public async Task<List<SongResponseDTO>> SearchSongs(SongSearchDTO query)
         {
             LastfmClient lastFM = GetLastfmClient();
-            var response = await lastFM.Track.SearchAsync(query.Title);
+            string queryParam = query.Title + " " + query.Artist;
+            var response = await lastFM.Track.SearchAsync(queryParam);
             List<SongResponseDTO> tracks = SetSongResponseList(response.ToList());
             return tracks;
         }
