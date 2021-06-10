@@ -36,10 +36,13 @@ namespace SongFinder.Controllers
         public async Task<ActionResult<StreamingServicesSongResponseDTO>> GetSongResults([FromQuery] SongSearchDTO songSearch)
         {
             var spotifyService = new SpotifyService();
-            SongResponseDTO spotifyResult = await spotifyService.SearchSong(songSearch);
+            var deezerService = new DeezerService();
+            List<SongResponseDTO> spotifyResult = await spotifyService.SearchSongs(songSearch);
+            List<SongResponseDTO> deezerResult = await deezerService.SearchSongs(songSearch);
             StreamingServicesSongResponseDTO result = new StreamingServicesSongResponseDTO
                                                     {
-                                                        SpotifySongResponse = spotifyResult
+                                                        SpotifySongResponse = spotifyResult,
+                                                        DeezerResponse = deezerResult
                                                     };
             return Ok(result);
         }
@@ -91,9 +94,25 @@ namespace SongFinder.Controllers
         /// <returns>Ok(Song)</returns>
         [HttpGet("deezer-search")]
         [ProducesResponseType(200)]
-        public ActionResult<SongResponseDTO> GetDeezerSongResults([FromQuery] SongSearchDTO songSearch)
+        public async Task<ActionResult<SongResponseDTO>> GetDeezerSongResults([FromQuery] SongSearchDTO songSearch)
         {
-            return Ok();
+            var deezerService = new DeezerService();
+            SongResponseDTO result =  await deezerService.SearchSong(songSearch);
+            return Ok(result);
+        }
+
+        //GET deezer-search-list
+        /// <summary>
+        /// This GET method returns a list of possible song found by deezer music       
+        /// </summary>
+        /// <returns>Ok(List(Song))</returns>
+        [HttpGet("deezer-search-list")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<List<SongResponseDTO>>> GetDeezerSongResultsList([FromQuery] SongSearchDTO songSearch)
+        {
+            var deezerService = new DeezerService();
+            List<SongResponseDTO> result =  await deezerService.SearchSongs(songSearch);
+            return Ok(result);
         }
 
 
