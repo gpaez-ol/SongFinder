@@ -37,26 +37,45 @@ namespace SongFinder.Controllers
         {
             var spotifyService = new SpotifyService();
             var deezerService = new DeezerService();
+            var lastFMService = new LastFMService();
             List<SongResponseDTO> spotifyResult = await spotifyService.SearchSongs(songSearch);
             List<SongResponseDTO> deezerResult = await deezerService.SearchSongs(songSearch);
+            List<SongResponseDTO> lastFmResult = await lastFMService.SearchSongs(songSearch);
             StreamingServicesSongResponseDTO result = new StreamingServicesSongResponseDTO
                                                     {
                                                         SpotifySongResponse = spotifyResult,
-                                                        DeezerResponse = deezerResult
+                                                        DeezerResponse = deezerResult,
+                                                        LastFMMusicResponse = lastFmResult
                                                     };
             return Ok(result);
         }
 
-        //GET amazon-music-search
+        //GET lastfm-music-search
         /// <summary>
-        /// This GET method returns a possible song found by amazon  music        
+        /// This GET method returns a possible song found by lastfm  music        
         /// </summary>
         /// <returns>Ok(Song)</returns>
-        [HttpGet("amazon-music-search")]
+        [HttpGet("lastfm-music-search")]
         [ProducesResponseType(200)]
-        public ActionResult<SongResponseDTO> GetAmazonMusicSongResults([FromQuery] SongSearchDTO songSearch)
+        public async Task<ActionResult<SongResponseDTO>> GetLastFmSongResults([FromQuery] SongSearchDTO songSearch)
         {
-            return Ok();
+            var lastFmService = new LastFMService();
+            SongResponseDTO result =  await lastFmService.SearchSong(songSearch);
+            return Ok(result);
+        }
+
+         //GET lastfm-music-search-list
+        /// <summary>
+        /// This GET method returns a possible list of songs found by lastfm  music        
+        /// </summary>
+        /// <returns>Ok(Song)</returns>
+        [HttpGet("lastfm-music-search-list")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<List<SongResponseDTO>>> GetLastFmSongListResults([FromQuery] SongSearchDTO songSearch)
+        {
+            var lastFmService = new LastFMService();
+            List<SongResponseDTO> result =  await lastFmService.SearchSongs(songSearch);
+            return Ok(result);
         }
 
         //GET spotify-search

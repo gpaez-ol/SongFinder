@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="E.Deezer" Version="4.1.0" />
+    <PackageReference Include="Inflatable.Lastfm" Version="1.2.0" />
     <PackageReference Include="SpotifyAPI.Web" Version="6.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     

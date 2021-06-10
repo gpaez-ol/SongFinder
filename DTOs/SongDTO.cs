@@ -23,9 +23,9 @@ namespace SongFinder.DTO
         /// </summary>
         public List<SongResponseDTO> SpotifySongResponse {get;set;}
         /// <summary>
-        /// Amazon Music Result
+        /// LastFM Music Result
         /// </summary>
-        public List<SongResponseDTO> AmazonMusicResponse {get;set;}
+        public List<SongResponseDTO> LastFMMusicResponse {get;set;}
         /// <summary>
         /// Deezer Music Result
         /// </summary>
