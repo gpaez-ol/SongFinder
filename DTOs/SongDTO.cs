@@ -21,15 +21,15 @@ namespace SongFinder.DTO
         /// <summary>
         /// Spotify Song  Result 
         /// </summary>
-        public SongResponseDTO SpotifySongResponse {get;set;}
+        public List<SongResponseDTO> SpotifySongResponse {get;set;}
         /// <summary>
         /// Amazon Music Result
         /// </summary>
-        public SongResponseDTO AmazonMusicResponse {get;set;}
+        public List<SongResponseDTO> AmazonMusicResponse {get;set;}
         /// <summary>
         /// Deezer Music Result
         /// </summary>
-        public SongResponseDTO DeezerResponse {get;set;}
+        public List<SongResponseDTO> DeezerResponse {get;set;}
     }
     public class SongResponseDTO
     {
