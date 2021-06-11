@@ -5,29 +5,31 @@ using System.Threading.Tasks;
 using E.Deezer;
 using E.Deezer.Api;
 using SongFinder.DTO;
+using SongFinder.StreamingServices.Factory;
+using SongFinder.StreamingServices.Interfaces;
 
 namespace SongFinder.StreamingServices
 {
-    public class DeezerService
+    public class DeezerService : IStreamingService
     {
-        private Deezer GetDeezerClient()
-        {
-            var deezer = DeezerSession.CreateNew();
-            return deezer;
-        }
+        private StreamingServiceFactory factory;
+        private Deezer deezer;
 
-        public async Task<SongResponseDTO> SearchSong(SongSearchDTO query)
+        public DeezerService()
         {
-            Deezer deezer = GetDeezerClient();
+            factory = new StreamingServiceFactory();
+            deezer = (Deezer)factory.getStreamingService(StreamingServiceType.Deezer);
+        }
+        public  async Task<SongResponseDTO> SearchSong(SongSearchDTO query)
+        {
             var queryString = query.Title + " " + query.Artist;
             var tracks = await deezer.Search.Tracks(queryString,0,1);
             var track = tracks.FirstOrDefault();
             var result = SetSingleSongResponse(track);
             return result;
         }
-        public async Task<List<SongResponseDTO>> SearchSongs(SongSearchDTO query)
+        public  async Task<List<SongResponseDTO>> SearchSongs(SongSearchDTO query)
         {
-            Deezer deezer = GetDeezerClient();
             var queryString = query.Title + " " + query.Artist;
             var tracks = await deezer.Search.Tracks(queryString);
             List<SongResponseDTO> result = SetSongResponseList(tracks.ToList());

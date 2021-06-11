@@ -5,20 +5,23 @@ using System.Threading.Tasks;
 using IF.Lastfm.Core.Api;
 using IF.Lastfm.Core.Objects;
 using SongFinder.DTO;
+using SongFinder.StreamingServices.Factory;
+using SongFinder.StreamingServices.Interfaces;
 
 namespace SongFinder.StreamingServices
 {
-    public class LastFMService
+    public class LastFMService : IStreamingService
     {
-        private LastfmClient GetLastfmClient()
-        {
-            var client = new LastfmClient("1dc640749935e63a85413195795cf56d", "74cd7c7f98189e6b1e073783c9282928"); // TODO: Add api key and secrets
-            return client;
-        }
+        private StreamingServiceFactory factory;
+        private LastfmClient lastFM;
 
+        public LastFMService()
+        {
+            factory = new StreamingServiceFactory();
+            lastFM = (LastfmClient)factory.getStreamingService(StreamingServiceType.LastFM);
+        }
         public async Task<SongResponseDTO> SearchSong(SongSearchDTO query)
         {
-            LastfmClient lastFM = GetLastfmClient();
             string queryParam = query.Title + " " + query.Artist;
             var tracks = await lastFM.Track.SearchAsync(queryParam);
             var track = tracks.FirstOrDefault();
@@ -32,7 +35,6 @@ namespace SongFinder.StreamingServices
 
         public async Task<List<SongResponseDTO>> SearchSongs(SongSearchDTO query)
         {
-            LastfmClient lastFM = GetLastfmClient();
             string queryParam = query.Title + " " + query.Artist;
             var response = await lastFM.Track.SearchAsync(queryParam);
             List<SongResponseDTO> tracks = SetSongResponseList(response.ToList());
