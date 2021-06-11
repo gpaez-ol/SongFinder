@@ -11,11 +11,10 @@ namespace SongFinder.StreamingServices
 {
     public class SpotifyService : IStreamingService
     {
-        private StreamingServiceFactory factory;
         private SpotifyClient spotify;
         public SpotifyService() : base()
         {
-            factory = new StreamingServiceFactory();
+            var factory = new StreamingServiceFactory();
             spotify = (SpotifyClient)factory.getStreamingService(StreamingServiceType.Spotify);
          }
 

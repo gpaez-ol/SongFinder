@@ -12,12 +12,11 @@ namespace SongFinder.StreamingServices
 {
     public class DeezerService : IStreamingService
     {
-        private StreamingServiceFactory factory;
         private Deezer deezer;
 
         public DeezerService()
         {
-            factory = new StreamingServiceFactory();
+            var factory = new StreamingServiceFactory();
             deezer = (Deezer)factory.getStreamingService(StreamingServiceType.Deezer);
         }
         public  async Task<SongResponseDTO> SearchSong(SongSearchDTO query)

@@ -12,12 +12,11 @@ namespace SongFinder.StreamingServices
 {
     public class LastFMService : IStreamingService
     {
-        private StreamingServiceFactory factory;
         private LastfmClient lastFM;
 
         public LastFMService()
         {
-            factory = new StreamingServiceFactory();
+            var factory = new StreamingServiceFactory();
             lastFM = (LastfmClient)factory.getStreamingService(StreamingServiceType.LastFM);
         }
         public async Task<SongResponseDTO> SearchSong(SongSearchDTO query)
